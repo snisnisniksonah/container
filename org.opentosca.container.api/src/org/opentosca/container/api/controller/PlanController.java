@@ -21,12 +21,10 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 import javax.xml.namespace.QName;
 
-import org.glassfish.jersey.uri.UriComponent;
 import org.opentosca.container.api.dto.PlanDTO;
 import org.opentosca.container.api.dto.PlanInstanceDTO;
 import org.opentosca.container.api.dto.PlanInstanceListDTO;
 import org.opentosca.container.api.dto.PlanListDTO;
-import org.opentosca.container.api.service.InstanceService;
 import org.opentosca.container.api.service.PlanService;
 import org.opentosca.container.api.util.JsonUtil;
 import org.opentosca.container.api.util.UriUtils;
@@ -50,7 +48,6 @@ public class PlanController {
   private static Logger logger = LoggerFactory.getLogger(PlanController.class);
 
   private final PlanService planService;
-  private final InstanceService instanceService;
 
   private final CSARID csarId;
   private final QName serviceTemplate;
@@ -61,12 +58,11 @@ public class PlanController {
 
   public PlanController(final CSARID csarId, final QName serviceTemplate,
       final Integer serviceTemplateInstanceId, final PlanService planService,
-      final InstanceService instanceService, final PlanTypes... planTypes) {
+      final PlanTypes... planTypes) {
     this.csarId = csarId;
     this.serviceTemplate = serviceTemplate;
     this.serviceTemplateInstanceId = serviceTemplateInstanceId;
     this.planService = planService;
-    this.instanceService = instanceService;
     this.planTypes.addAll(Arrays.asList(planTypes));
   }
 
@@ -202,7 +198,7 @@ public class PlanController {
       String url = Settings.CONTAINER_INSTANCEDATA_API + this.serviceTemplateInstanceId;
       url = url.replace("{csarid}", this.csarId.getFileName());
       url = url.replace("{servicetemplateid}",
-          UriComponent.encode(this.serviceTemplate.toString(), UriComponent.Type.PATH_SEGMENT));
+          UriUtils.encode(this.serviceTemplate.toString()).toString());
       final URI uri = UriUtils.encode(URI.create(url));
       final TParameter param = new TParameter();
       param.setName("OpenTOSCAContainerAPIServiceInstanceID");

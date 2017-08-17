@@ -150,7 +150,7 @@ public class ServiceTemplateInstanceController {
     }
 
     return new PlanController(csarContent.getCSARID(), QName.valueOf(servicetemplate), id,
-        this.planService, this.instanceService, PlanTypes.TERMINATION);
+        this.planService, PlanTypes.TERMINATION);
   }
 
   public void setCsarService(final CsarService csarService) {
